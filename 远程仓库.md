@@ -8,7 +8,7 @@
 - git remote：列出所有远程主机
 - git remote -v：查看远程主机的网址
 - git remote show <远程主机名>：查看远程主机的详细信息
-- git remote add/rm/rename：增加/删除/重命名远程主机
+- git remote add/rm/rename <远程主机名>：增加/删除/重命名远程主机
 
 #### 3.git pull
 - git pull <远程主机名> <远程分支名>:<本地分支名>：取回远程主机某个分支的更新，再与本地指定分支合并
