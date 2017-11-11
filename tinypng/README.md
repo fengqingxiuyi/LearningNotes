@@ -22,4 +22,6 @@
 1. 安装Python，Mac系统自带，Windows电脑可通过[官网](https://www.python.org/downloads/)下载；
 2. 在终端或CMD窗口中输入`python -V`命令，校验Python是否正确安装；
 3. 在终端或CMD窗口中输入`pip install -i https://pypi.doubanio.com/simple/ tinify`命令，使用国内镜像下载安装tinify；
-4. 在终端或CMD窗口中输入`python tinypng_mac.py`或`python tinypng_win.py`命令，进行图片批量压缩。
+4. 先进入[TinyPng官网](https://tinypng.com/)登录用户，接着进入[TinyPng Developers](https://tinypng.com/dashboard/developers)网址后选择`Developer API`选项卡，然后复制Developer API Key；
+5. 在终端或CMD窗口中输入`python tinypng_mac.py`或`python tinypng_win.py`命令，进行图片批量压缩；
+6. 脚本下载地址：<https://github.com/fengqingxiuyi/LearningNotes/tree/master/tinypng>。
