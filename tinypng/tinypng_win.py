@@ -10,9 +10,62 @@ import tinify
 import os
 import os.path
 
-tinify.key ="Your Developer API Key" # AppKey
+# tinify.key ="Your Developer API Key" # AppKey
 fromPath ="C:\\Users\\Administrator\\Desktop\\temp\\src" # source dir path
 toPath ="C:\\Users\\Administrator\\Desktop\\temp\\dest" # dest dir path
+
+# 压缩图片的key
+online_key_list = [
+    "RdHoRF9i936xXJCP-ES2c9YCHB0MhxOh",
+    "q20BBKkn5t6_AZBxYL1sJcLiW0a4Cufq",# 可以继续添加  防止一个key不够
+]
+online_key_list_iter = iter(online_key_list)
+online_key = next(online_key_list_iter)
+
+# 在线压缩
+def compress_online(sourcefile, outputfile):
+    global online_key
+    compresskey = online_key
+
+    tinify.key = compresskey
+    rs = False
+    try:
+        source = tinify.from_file(sourcefile)
+        source.to_file(outputfile)
+        print '压缩图片...' + outputfile
+        rs = True
+      pass
+    except tinify.AccountError, e:
+        # Verify your API key and account limit.
+      # 如果key值无效 换一个key继续压缩
+      print "key值无效 换一个继续。。。"
+      online_key = next(online_key_list_iter)
+      compress_online(sourcefile, outputfile, name)   #递归方法 继续读取
+      rs = True
+    except tinify.ClientError, e:
+        # Check your source image and request options.
+      print "Check your source image and request options. %s" % e.message
+      rs = False
+      pass
+    except tinify.ServerError, e:
+        # Temporary issue with the Tinify API.
+      print "Temporary issue with the Tinify API. %s" % e.message
+      rs = False
+      pass
+    except tinify.ConnectionError, e:
+        # A network connection error occurred.
+      print "网络故障。。。休息1秒继续"
+      time.sleep(1)
+      compress_online(sourcefile, outputfile, name)   #递归方法 继续读取
+      rs = True
+      pass
+    except Exception, e:
+        # Something else went wrong, unrelated to the Tinify API.
+      print "Something else went wrong, unrelated to the Tinify API.  %s" % e.message
+      rs = False
+      pass
+
+    return rs
 
 # root, dirs, files参数的含义：目录的路径(String)；root目录下所有子目录的名字(List)；root目录下非目录的名字
 # os.walk(top,topdown=True,onerror=None)函数中各参数的含义：需要遍历的顶级目录的路径；默认值是“True”表示首先返回顶级目录下的文件，然后再遍历子目录中的文件；默认值为"None"，表示忽略文件遍历时的错误
@@ -29,8 +82,13 @@ for root, dirs, files in os.walk(fromPath):
 		newToFilePath = os.path.join(newToPath, name)
 		fileName, fileSuffix = os.path.splitext(name) # 分解文件名的扩展名
 		if fileSuffix == '.png' or fileSuffix == '.jpg':
-			source = tinify.from_file(newFromFilePath)
-			source.to_file(newToFilePath)
+# 			source = tinify.from_file(newFromFilePath)
+# 			source.to_file(newToFilePath)
+			# 在线压缩
+			if not compress_online(newFromFilePath, newToFilePath):
+			    print "压缩失败，检查报错信息"
+			    sys.exit()
+			    pass
 		else:
 			pass
 
